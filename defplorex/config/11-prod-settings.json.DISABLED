@@ -1,0 +1,35 @@
+{
+    "LOGGING": {
+        "version": 1,
+        "disable_existing_loggers": true,
+        "formatters": {
+            "logstash": {
+                "()": "loggers.Formatter",
+                "format": "1 %(asctime)s {host} %(processName)s %(process)d {project} [pythonData filename=\"%(filename)s\" thread=\"%(threadName)s\" line=\"%(lineno)d\" module=\"%(module)s\"][esData index_keyword=\"{project}\"] %(levelname)s %(message)s"
+            }
+        },
+        "handlers": {
+            "logstash": {
+                "()": "logging.handlers.SysLogHandler",
+                "formatter": "logstash",
+                "level": "WARN",
+                "address": ["__LOGSTASH_SERVER__", 5514]
+            }
+        },
+        "loggers": {
+            "defplorex": {
+                "handlers": [
+                    "logstash"
+                ],
+                "level": "WARN",
+                "propagate": false
+            }
+        },
+        "root": {
+            "handlers": [
+                "logstash"
+            ],
+            "level": "WARN"
+        }
+    }
+}

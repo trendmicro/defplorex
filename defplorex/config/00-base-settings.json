@@ -1,0 +1,75 @@
+{
+    "project": "__PROJECT_NAME__",
+
+    "default_lang": "eng",
+    "bulk_size": 1000,
+
+    "es": {
+        "client": {
+            "hosts": [
+                "__ELASTCSEARCH_SERVER__:9200"
+            ],
+            "timeout": 240,
+            "retry_on_timeout": true
+        },
+        "index": "__INDEX_NAME__",
+        "doc_type": "__DOC_TYPE_NAME__"
+    },
+
+    "encoding": "utf-8",
+    "path_encoding": "utf-8",
+    "target_tz": "UTC",
+    "date_format": "YYYY-MM-DD HH:mm:ss",
+
+    "LOGGING": {
+        "version": 1,
+        "disable_existing_loggers": true,
+        "formatters": {
+            "console": {
+                "()": "defplorex.loggers.Formatter",
+                "format": "[%(asctime)s] - %(name)s |%(levelname)s| %(message)s"
+            },
+            "colorlog": {
+                "()": "colorlog.ColoredFormatter",
+                "format": "%(log_color)s[%(asctime)s] - %(name)s |%(levelname)s| %(message)s"
+            },
+            "logstash": {
+                "()": "defplorex.loggers.Formatter",
+                "format": "1 %(asctime)s {host} %(processName)s %(process)d {project} [pythonData filename=\"%(filename)s\" thread=\"%(threadName)s\" line=\"%(lineno)d\" module=\"%(module)s\"][esData index_keyword=\"{project}\"] %(levelname)s %(message)s"
+            }
+        },
+        "handlers": {
+            "console": {
+                "()": "logging.StreamHandler",
+                "formatter": "console",
+                "level": "DEBUG"
+            },
+            "colorlog": {
+                "()": "colorlog.StreamHandler",
+                "formatter": "colorlog",
+                "level": "DEBUG"
+            },
+            "logstash": {
+                "()": "logging.handlers.SysLogHandler",
+                "formatter": "logstash",
+                "level": "DEBUG",
+                "address": ["__LOGSTASH_SERVER__", 5514]
+            }
+        },
+        "loggers": {
+            "defplorex": {
+                "handlers": [
+                    "colorlog"
+                ],
+                "level": "DEBUG",
+                "propagate": false
+            }
+        },
+        "root": {
+            "handlers": [
+                "colorlog"
+            ],
+            "level": "DEBUG"
+        }
+    }
+}
